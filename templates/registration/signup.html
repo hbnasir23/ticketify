@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sign Up - Ticketify</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body style="margin:0;">
+
+    <div class="auth-full-screen">
+        <div class="auth-bg-animation"></div>
+
+        <div class="auth-glass-card">
+            
+            <img src="{% static 'images/logo.png' %}" alt="Logo" style="width: 80px; margin-bottom: 20px;">
+            
+            <h2 style="color: white; margin-bottom: 5px;">Join Ticketify</h2>
+            <p style="color: var(--text-gray); margin-bottom: 25px; font-size: 0.9rem;">Create your account</p>
+
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div style="margin-bottom: 10px; text-align: left;">
+                        {{ field }}
+                        {% if field.errors %}
+                            <div style="color: #ff4d4d; font-size: 0.8rem; margin-top: 2px;">{{ field.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <script>
+                    var formFields = document.querySelectorAll('.auth-glass-card input');
+                    // Add placeholders manually based on order or generic names
+                    if(formFields[0]) formFields[0].placeholder = "Username";
+                    if(formFields[1]) formFields[1].placeholder = "Password";
+                    if(formFields[2]) formFields[2].placeholder = "Confirm Password";
+                </script>
+
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+
+            <p style="margin-top: 20px; color: var(--text-gray); font-size: 0.9rem;">
+                Already have an account? <a href="{% url 'login' %}" style="color: #00d09c; text-decoration: none;">Login</a>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

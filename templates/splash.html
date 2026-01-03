@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Ticketify</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <script>
+        // Auto-redirect after 3.5 seconds
+        setTimeout(function() {
+            window.location.href = "{% url 'login' %}"; 
+        }, 3500);
+    </script>
+</head>
+<body>
+
+    <div class="splash-container">
+        <div class="splash-bg-animation"></div>
+
+        <img src="{% static 'images/logo.png' %}" alt="Ticketify Logo" class="splash-logo">
+        
+        <h1 style="color: white; font-size: 3rem; margin: 0; font-weight:bold;">Ticketify</h1>
+
+        <p class="splash-tagline">Your tickets, your dashboard</p>
+
+        <div class="loading-bar"></div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="auth-bg-animation" style="position:fixed; opacity:0.03;"></div>
+
+<nav class="glass-nav">
+    <div style="font-size:1.5rem; font-weight:bold; color:var(--primary);">
+        <img src="{% static 'images/logo.png' %}" style="width:30px; vertical-align:middle;"> Ticketify
+    </div>
+
+    <form method="get" style="margin:0;">
+        <input type="text" name="q" class="search-bar" placeholder="Search description..." value="{{ request.GET.q|default:'' }}">
+    </form>
+
+    <div class="nav-profile" onclick="openLogoutModal()">
+        <span style="margin-right:10px; color:var(--text-gray);">{{ user.username }}</span>
+        <div class="profile-avatar">{{ user.username|slice:":1" }}</div>
+    </div>
+</nav>
+
+<div class="container" style="position:relative; z-index:2; margin-top:30px;">
+    
+    <h3 style="color:white; margin-bottom:15px;">Overview</h3>
+    <div class="stats-grid">
+        <div class="stat-glass-card">
+            <div style="color:var(--text-gray)">Open</div>
+            <div class="stat-number">{{ total_open }}</div>
+        </div>
+        <div class="stat-glass-card" style="border-left-color:#f1c40f;">
+            <div style="color:var(--text-gray)">In Progress</div>
+            <div class="stat-number">{{ total_progress }}</div>
+        </div>
+        <div class="stat-glass-card" style="border-left-color:#2ecc71;">
+            <div style="color:var(--text-gray)">Resolved</div>
+            <div class="stat-number">{{ total_resolved }}</div>
+        </div>
+        <div class="stat-glass-card" style="border-left-color:#ff4d4d;">
+            <div style="color:var(--text-gray)">High Priority</div>
+            <div class="stat-number">{{ total_high }}</div>
+        </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+        <form method="get" id="filterForm">
+            <select name="priority" onchange="this.form.submit()" style="width:auto; display:inline-block;">
+                <option value="">All Priorities</option>
+                <option value="High" {% if request.GET.priority == 'High' %}selected{% endif %}>High</option>
+                <option value="Medium" {% if request.GET.priority == 'Medium' %}selected{% endif %}>Medium</option>
+                <option value="Low" {% if request.GET.priority == 'Low' %}selected{% endif %}>Low</option>
+            </select>
+            <select name="category" onchange="this.form.submit()" style="width:auto; display:inline-block;">
+                <option value="">All Categories</option>
+                <option value="Technical" {% if request.GET.category == 'Technical' %}selected{% endif %}>Technical</option>
+                <option value="Billing" {% if request.GET.category == 'Billing' %}selected{% endif %}>Billing</option>
+                <option value="General" {% if request.GET.category == 'General' %}selected{% endif %}>General</option>
+            </select>
+        </form>
+        
+        <a href="{% url 'create_ticket' %}" class="btn" style="width:auto;">+ New Ticket</a>
+    </div>
+
+    <table class="glass-table">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td style="font-weight:bold; color:white;">{{ ticket.subject }}</td>
+                <td style="color:#aaa;">{{ ticket.category }}</td>
+                <td>
+                    <span class="badge" style="
+                        {% if ticket.priority == 'High' %}color:#ff4d4d; background:rgba(255,77,77,0.1);
+                        {% elif ticket.priority == 'Medium' %}color:#f1c40f; background:rgba(241,196,15,0.1);
+                        {% else %}color:#00d09c; background:rgba(0,208,156,0.1);{% endif %}">
+                        {{ ticket.priority }}
+                    </span>
+                </td>
+                <td>{{ ticket.status }}</td>
+                <td>
+                    <button onclick="openEditModal('{{ ticket.id }}', '{{ ticket.status }}')" 
+                            style="background:none; border:none; color:#3498db; cursor:pointer; font-weight:bold;">
+                        Edit
+                    </button>
+                    <button onclick="openDeleteModal('{{ ticket.id }}')" 
+                            style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-weight:bold; margin-left:10px;">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" style="text-align:center; padding:30px; color:gray;">No tickets found matching your search.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="logoutModal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 style="color:white;">Confirm Logout</h2>
+        <p style="color:gray;">Are you sure you want to log out?</p>
+        <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+            <button onclick="closeModal('logoutModal')" class="btn" style="background:#444;">Cancel</button>
+            <form action="{% url 'logout' %}" method="post" style="width:100%;">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="background:#ff4d4d;">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 style="color:white; color:#ff4d4d;">Delete Ticket?</h2>
+        <p style="color:gray;">This action cannot be undone.</p>
+        <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+            <button onclick="closeModal('deleteModal')" class="btn" style="background:#444;">Cancel</button>
+            <form id="deleteForm" method="post" style="width:100%;">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="background:#ff4d4d;">Confirm Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="editModal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 style="color:white;">Update Status</h2>
+        <p style="color:gray;">Change the status of this ticket.</p>
+        <form id="editForm" method="post">
+            {% csrf_token %}
+            <select name="status" id="editStatusSelect" style="margin-bottom:20px;">
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+            </select>
+            <div style="display:flex; gap:10px;">
+                <button type="button" onclick="closeModal('editModal')" class="btn" style="background:#444;">Cancel</button>
+                <button type="submit" class="btn">Update & Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'flex';
+    }
+    
+    function openDeleteModal(id) {
+        document.getElementById('deleteForm').action = "/delete/" + id + "/";
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function openEditModal(id, currentStatus) {
+        document.getElementById('editForm').action = "/update/" + id + "/";
+        document.getElementById('editStatusSelect').value = currentStatus;
+        document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+</script>
+
+{% endblock %}

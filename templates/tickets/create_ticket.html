@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 40px auto;">
+    <h2>Create New Ticket</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <label>Subject</label>
+        <input type="text" name="subject" required placeholder="Brief summary of issue">
+
+        <label>Priority</label>
+        <select name="priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+
+        <label>Description</label>
+        <textarea name="description" rows="5" required placeholder="Describe the details..."></textarea>
+
+        <button type="submit" style="margin-top: 15px;">Submit Ticket</button>
+    </form>
+    <br>
+    <a href="{% url 'dashboard' %}" style="color: var(--text-gray);">Cancel</a>
+</div>
+{% endblock %}
