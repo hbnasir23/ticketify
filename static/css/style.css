@@ -521,3 +521,74 @@ th { color: var(--text-gray); }
     color: white;
     width: 250px;
 }
+
+
+/* --- UPDATED DASHBOARD STYLES --- */
+
+/* Navbar Fix */
+.glass-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(20, 23, 28, 0.95); /* Darker, less see-through */
+    padding: 15px 30px;
+    border-bottom: 1px solid #333;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+.nav-logo { height: 30px; }
+.nav-actions { display: flex; gap: 15px; }
+
+/* Icon Buttons (Logout/Profile) */
+.icon-btn {
+    background: none; border: none; cursor: pointer; color: var(--text-gray); font-size: 1.2rem;
+    transition: 0.2s;
+}
+.icon-btn:hover { color: white; transform: scale(1.1); }
+
+.profile-circle {
+    width: 35px; height: 35px; background: var(--primary); color: black;
+    border-radius: 50%; font-size: 16px; font-weight: bold;
+    display: flex; justify-content: center; align-items: center;
+}
+
+/* SEXY PRIORITY CARDS */
+.priority-high { background: linear-gradient(135deg, rgba(255, 77, 77, 0.1), rgba(255, 77, 77, 0.05)); border-left: 4px solid #ff4d4d; }
+.priority-medium { background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.05)); border-left: 4px solid #3498db; }
+.priority-low { background: linear-gradient(135deg, rgba(241, 196, 15, 0.1), rgba(241, 196, 15, 0.05)); border-left: 4px solid #f1c40f; }
+
+/* Control Row (Search + Filter) */
+.controls-row {
+    display: flex; gap: 10px; margin: 30px 0; align-items: center;
+}
+.search-filter-form {
+    display: flex; gap: 10px; flex-grow: 1;
+}
+.control-input {
+    background: #1c2128; border: 1px solid #333; color: white; padding: 10px 15px; border-radius: 8px; flex-grow: 1;
+}
+.control-select {
+    background: #1c2128; border: 1px solid #333; color: white; padding: 10px; border-radius: 8px; cursor: pointer;
+}
+.btn-search {
+    background: var(--primary); color: black; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer;
+}
+.btn-new {
+    background: white; color: black; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block;
+}
+
+/* Table Interactions */
+tbody tr { cursor: pointer; transition: background 0.2s; }
+tbody tr:hover { background: rgba(255,255,255,0.05); }
+
+/* Modal Tweaks */
+.modal-box.text-left { text-align: left; }
+.detail-row { color: var(--text-gray); font-size: 0.9rem; margin-bottom: 20px; }
+.detail-desc-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; min-height: 80px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+/* Buttons */
+.btn-cancel { background: #444; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+.btn-danger { background: #ff4d4d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+.btn-text-danger { background: none; color: #ff4d4d; border: none; cursor: pointer; font-weight: bold; margin-right: auto; } /* Pushes to left */
+
+.full-width { width: 100%; margin-top: 5px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }

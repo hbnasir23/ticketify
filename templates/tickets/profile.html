@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="auth-full-screen">
+    <div class="auth-bg-animation"></div>
+    
+    <div class="auth-glass-card" style="max-width:400px; text-align:center;">
+        <div style="width:80px; height:80px; background:var(--primary); color:black; border-radius:50%; font-size:40px; font-weight:bold; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+            {{ user.username|slice:":1"|upper }}
+        </div>
+        
+        <h2 style="color:white; margin-bottom:5px;">{{ user.username }}</h2>
+        <p style="color:var(--text-gray); margin-bottom:30px;">User Profile</p>
+        
+        <div style="text-align:left; background:rgba(0,0,0,0.3); padding:20px; border-radius:10px; margin-bottom:20px;">
+            <div style="margin-bottom:15px;">
+                <label style="color:#aaa; font-size:0.8rem;">FULL NAME</label>
+                <div style="color:white; font-size:1.1rem; font-weight:bold;">{{ user.username }}</div> 
+                </div>
+            <div style="margin-bottom:15px;">
+                <label style="color:#aaa; font-size:0.8rem;">EMAIL ADDRESS</label>
+                <div style="color:white; font-size:1.1rem;">{{ user.email|default:"No email linked" }}</div>
+            </div>
+            <div>
+                <label style="color:#aaa; font-size:0.8rem;">MEMBER SINCE</label>
+                <div style="color:white; font-size:1.1rem;">{{ user.date_joined|date:"M d, Y" }}</div>
+            </div>
+        </div>
+
+        <a href="{% url 'dashboard' %}" class="btn" style="display:block; text-decoration:none;">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

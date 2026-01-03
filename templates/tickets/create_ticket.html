@@ -1,27 +1,48 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="card" style="max-width: 600px; margin: 40px auto;">
-    <h2>Create New Ticket</h2>
-    <form method="post">
-        {% csrf_token %}
+<div class="auth-full-screen">
+    <div class="auth-bg-animation"></div>
+
+    <div class="auth-glass-card" style="max-width:600px; text-align:left;">
+        <h2 style="color:white; text-align:center; margin-bottom:20px;">Create New Ticket</h2>
         
-        <label>Subject</label>
-        <input type="text" name="subject" required placeholder="Brief summary of issue">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div style="margin-bottom:15px;">
+                <label style="color:#aaa; font-size:0.9rem;">Subject <span style="color:#ff4d4d">*</span></label>
+                <input type="text" name="subject" class="control-input" style="width:100%; margin-top:5px;" required placeholder="Brief summary of issue...">
+            </div>
 
-        <label>Priority</label>
-        <select name="priority">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+                <div>
+                    <label style="color:#aaa; font-size:0.9rem;">Priority</label>
+                    <select name="priority" class="control-select full-width">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="color:#aaa; font-size:0.9rem;">Category</label>
+                    <select name="category" class="control-select full-width">
+                        <option value="General">General</option>
+                        <option value="Technical">Technical</option>
+                        <option value="Billing">Billing</option>
+                    </select>
+                </div>
+            </div>
 
-        <label>Description</label>
-        <textarea name="description" rows="5" required placeholder="Describe the details..."></textarea>
+            <div style="margin-bottom:25px;">
+                <label style="color:#aaa; font-size:0.9rem;">Description</label>
+                <textarea name="description" rows="5" class="control-input" style="width:100%; margin-top:5px;" required placeholder="Describe the details..."></textarea>
+            </div>
 
-        <button type="submit" style="margin-top: 15px;">Submit Ticket</button>
-    </form>
-    <br>
-    <a href="{% url 'dashboard' %}" style="color: var(--text-gray);">Cancel</a>
+            <div style="display:flex; gap:10px;">
+                <a href="{% url 'dashboard' %}" class="btn-cancel" style="text-align:center; text-decoration:none; flex:1;">Cancel</a>
+                <button type="submit" class="btn" style="flex:2;">Submit Ticket</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
