@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.db.models import Q
 from .models import Ticket
 
-# --- 1. SPLASH SCREEN ---
+
 def splash(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -57,9 +57,9 @@ def dashboard(request):
     # 4. Date Sorting Logic (New Feature)
     date_sort = request.GET.get('date_sort')
     if date_sort == 'oldest':
-        tickets = tickets.order_by('created_at') # Ascending
+        tickets = tickets.order_by('created_at') 
     else:
-        tickets = tickets.order_by('-created_at') # Descending (Default)
+        tickets = tickets.order_by('-created_at') 
 
     # 5. Stats Calculations
     all_tickets = Ticket.objects.filter(user=request.user)
@@ -90,12 +90,11 @@ def create_ticket(request):
         return redirect('dashboard')
     return render(request, 'tickets/create_ticket.html')
 
-# --- 6. UPDATE TICKET (Full Edit) ---
+# --- 6. UPDATE TICKET  ---
 @login_required
 def update_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, pk=ticket_id, user=request.user)
     if request.method == 'POST':
-        # Update all allowed fields
         ticket.description = request.POST.get('description')
         ticket.category = request.POST.get('category')
         ticket.priority = request.POST.get('priority')
